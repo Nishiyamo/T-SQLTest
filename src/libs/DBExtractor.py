@@ -1,5 +1,6 @@
 import json
 import pyodbc
+import time
 
 class DBExtractor():
     def __init__(self, configFile: str):
@@ -17,7 +18,8 @@ class DBExtractor():
 
     def extract(self, targetFile: str):
         conn = None
-        
+        start = time.time()
+        print('Starting connection and messuring time fo the transaction')
         try:
             conn = pyodbc.connect("DRIVER={ODBC Driver 18 for SQL Server}" +
                                 ";SERVER=" + self._HOST + 
@@ -32,5 +34,8 @@ class DBExtractor():
             # End of exercise
         except:
             print("error extracting data from sqlserver")
-        finally:        
-            if conn: conn.close()
+        finally:
+            if conn:
+                end = start - time.time()
+                print('Clossing conection and time elapsed is %s' % end)
+                conn.close()

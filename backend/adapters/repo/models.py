@@ -1,8 +1,6 @@
 from sqlalchemy import Column, String, Float, Date
-from import
 
-Base = declarative_base()
-
-class Customer(EqMixin, Base):
+class Customer:
     __tablename__ = "Customer"
-    CustomerId = db.Column()
+    CustomerId = Column()
+

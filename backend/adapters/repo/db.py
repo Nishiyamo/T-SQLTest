@@ -1,5 +1,11 @@
 from sqlalchemy import create_engine
 
-connection_string = 'mssql+pyodbc://SA:cmgYB2Zr4NJra2gRtGyjypag@127.0.0.1:1433/ATLAX360_HI_DBdriver=ODBC+Driver+17+for+SQL+Server'
+server = '127.0.0.1:1433'
+database = 'ATLAX360_HI_DB'
+driver = 'ODBC+Driver+17+for+SQL+Server'
+user = 'SA'
+password = 'cmgYB2Zr4NJra2gRtGyjypag'
+connection_string = f'mssql+pyodbc://{user}:{password}@{server}/{database}?driver={driver}'
 
-db = create_engine(connection_string)
+engine = create_engine(connection_string)
+db = engine.connect()

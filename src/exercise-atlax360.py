@@ -1,20 +1,25 @@
 import sys
-
+import os.path
 from typing import List
 
-from src.libs import DBExtractor
+from src.libs.DBExtractor import DBExtractor
 
-
+config_json_string = '\config\exercise-atlax360.json'
 
 def main(args: List[str]):
-    try:        
-        extractor = DBExtractor("./config/exercise-atlax360.json")
-    except Exception:
-        print("error locating configuration file ./config/exercise-atlax360.json")
+    try:
+        basepath = os.getcwd()
+        config_full_string = basepath + config_json_string
+        os.path.isfile(config_full_string)
+        try:
+            extractor = DBExtractor(config_full_string)
+        except Exception:
+            print("Can't load configuration file %s" % config_full_string)
 
-    if len(args) != 1: print("missing required argument target file")
-    else: extractor.extract(args[0])
-
+        if len(args) != 1: print("missing required argument target file")
+        else: extractor.extract(args[0])
+    except:
+        print("Can't locate %s" % config_full_string)
 
 
 main(sys.argv[1:])

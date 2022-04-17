@@ -27,7 +27,6 @@ class DBExtractor():
                                 ";UID=" + self._USER + 
                                 ";PWD=" + self._PASSWORD + 
                                 ";TrustServerCertificate=Yes")
-            
             # Insert your exercise code here
             #
             #

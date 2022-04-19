@@ -1,4 +1,6 @@
 import json
+import logging
+
 import pyodbc
 import time
 import pandas as pd
@@ -49,13 +51,22 @@ class DBExtractor():
     #     """
     #
     #
-    # def dump_to_csv(self):
-    #
+    def dump_to_csv(self, targetFile, data):
+        basepath = os.getcwd()
+    # todo create and dump to csv data
 
-    # in this class I'm going to manipulate all sub classes to isolate dependencies
+    def gzip_csv(self, csv):
+# todo gzip csv
+
+    # Main fn for this class
     def extract(self, targetFile: str):
-        connection = self.db_connection()
-        cursor = connection.cursor()
-        self.db_create_index(self, cursor=cursor, id='flag', table='Item', column='DeletedFlag')
-        self.db_create_index(self, cursor=cursor, id='version', table='Item', column='VersionNbr')
-        self.db_close_connection(connection)
+        try:
+            connection = self.db_connection()
+            cursor = connection.cursor()
+            self.db_create_index(self, cursor=cursor, id='flag', table='Item', column='DeletedFlag')
+            self.db_create_index(self, cursor=cursor, id='version', table='Item', column='VersionNbr')
+
+        except Exception as e:
+            logging.ERROR(e)
+        finally:
+            self.db_close_connection(connection)

@@ -1,6 +1,7 @@
 import json
 import pyodbc
 import time
+import pandas as pd
 
 class DBExtractor():
     def __init__(self, configFile: str):
@@ -14,27 +15,47 @@ class DBExtractor():
         self._PASSWORD = data["PASSWORD"]
         
         f.close()
- 
 
-    def extract(self, targetFile: str):
+
+    def db_connection(self):
         conn = None
-        start = time.time()
+        self.start = time.time()
         print('Starting connection and messuring time fo the transaction')
         try:
-            conn = pyodbc.connect("DRIVER={ODBC Driver 18 for SQL Server}" +
-                                ";SERVER=" + self._HOST + 
-                                ";DATABASE=" + self._DATABASE + 
-                                ";UID=" + self._USER + 
-                                ";PWD=" + self._PASSWORD + 
-                                ";TrustServerCertificate=Yes")
-            # Insert your exercise code here
-            #
-            #
-            # End of exercise
+            return pyodbc.connect("DRIVER={ODBC Driver 18 for SQL Server}" +
+                                  ";SERVER=" + self._HOST +
+                                  ";DATABASE=" + self._DATABASE +
+                                  ";UID=" + self._USER +
+                                  ";PWD=" + self._PASSWORD +
+                                  ";TrustServerCertificate=Yes")
         except:
             print("error extracting data from sqlserver")
-        finally:
-            if conn:
-                end = start - time.time()
-                print('Clossing conection and time elapsed is %s' % end)
-                conn.close()
+
+
+    def db_close_connection(self, conn):
+        if conn:
+            end = self.start - time.time()
+            print('Clossing conection and time elapsed is %s' % end)
+            conn.close()
+
+    def db_create_index(self, cursor, id, table, column):
+        sql_str = " CREATE INDEX {id} ON {schema}.{table} ({column}); "
+        sql_str.format(id=id, schema=self._DATABASE, table=table, column=column)
+        cursor.execute(sql_str)
+
+    # def fetch_data(self):
+    #     sql_str= """
+    #
+    #     """
+    #
+    #
+    # def dump_to_csv(self):
+    #
+
+    # in this class I'm going to manipulate all sub classes to isolate dependencies
+    def extract(self, targetFile: str):
+        connection = self.db_connection()
+        cursor = connection.cursor()
+        self.db_create_index(self, cursor=cursor, id='flag', table='Item', column='DeletedFlag')
+        self.db_create_index(self, cursor=cursor, id='version', table='Item', column='VersionNbr')
+        self.db_close_connection(connection)

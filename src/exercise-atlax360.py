@@ -4,12 +4,12 @@ from typing import List
 
 from src.libs.DBExtractor import DBExtractor
 
+basepath = os.getcwd()
 config_json_string = '\config\exercise-atlax360.json'
+config_full_string = basepath + config_json_string
 
 def main(args: List[str]):
     try:
-        basepath = os.getcwd()
-        config_full_string = basepath + config_json_string
         os.path.isfile(config_full_string)
         try:
             extractor = DBExtractor(config_full_string)

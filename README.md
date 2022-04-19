@@ -8,7 +8,7 @@ Inside the server you have to use:
 use ATLAX360_HI_DB; that is our "Prod" db.
 And do all querys to this db
 
-All these comments, where done by doing experiments with MSSQL and SQLAlchemy
+All these comments, where done when experimenting with MSSQL and SQLAlchemy
 
 
 ChangeLog for the code test:

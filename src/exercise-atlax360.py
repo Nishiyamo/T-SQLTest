@@ -13,19 +13,14 @@ def main(args: List[str]):
         config_full_string = basepath + config_json_string
         os.path.isfile(config_full_string)
         try:
-            extractor = DBExtractor(config_full_string)
+            extractor = DBExtractor(basepath, config_full_string)
         except Exception:
             print("Can't load configuration file %s" % config_full_string)
-
         if len(args) != 1: print("missing required argument target file")
-        else: extractor.extract(args[0])
-    except:
-        print("Can't locate %s" % config_full_string)
-    finally:
-        dump_csv = basepath + args[0]
-        exits_csv = os.path.isfile(dump_csv)
-        # todo ending class
-        logging.INFO("Data dumped to csv on %s and gziped on %s" % basepath)
+        else:
+            extractor.extract(args[0])
+    except Exception as e:
+        logging.info(e)
 
 
 main(sys.argv[1:])
